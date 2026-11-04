@@ -1,19 +1,11 @@
 import psutil
 import platform
 
-#переменная хранит в себе метод измерения средней нагрузки на процессор интервалом в 1 секунду
-cpu = psutil.cpu_percent(interval=1)
-
-#переменная хранит в себе измерение нагрузки на оперативную память, percent какая доля ресурса используется в процентах
-memory= psutil.virtual_memory().percent
-
-# переменная хранит в себе вычисление заполнености диска C в процентах
-disk = psutil.disk_usage("C:\\").percent
 
 print(f"""
         ================================
                     SENTINEL
-                System Monitor v0.2
+                System Monitor v0.3
         ================================
         
         [ SYSTEM ]
@@ -29,6 +21,11 @@ print(f"""
         Total Memory: {round(psutil.virtual_memory().total / (1024 ** 3), 2)} GB
         Available Memory: {round(psutil.virtual_memory().available / (1024 ** 3), 2)} GB
         Used Memory: {round(psutil.virtual_memory().used / (1024 ** 3), 2)} GB
+        
+        [ DISK ]
+        Disk Total: {round(psutil.disk_usage("C:\\").total / (1024 ** 3), 2)} GB
+        Disk Used: {round(psutil.disk_usage("C:\\").used / (1024 ** 3), 2)} GB
+        Disk Free: {round(psutil.disk_usage("C:\\").free / (1024 ** 3), 2)} GB
 """)
 
-#Доделать диск
+#В дальнейшем придумать что-то нормальное
