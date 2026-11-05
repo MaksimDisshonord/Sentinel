@@ -1,31 +1,36 @@
 import psutil
-import platform
+from rich.table import Table
+from rich.live import Live
 
 
-print(f"""
-        ================================
-                    SENTINEL
-                System Monitor v0.3
-        ================================
-        
-        [ SYSTEM ]
-        System: {platform.system()}
-        
-        [ PROCESSOR ]
-        Logical processors: {psutil.cpu_count(logical=True)} 
-        Physical cores: {psutil.cpu_count(logical=False)}
-        Current frequency: {round(psutil.cpu_freq().current / 1000, 2)} GHz
-        Used CPU: {psutil.cpu_percent(interval=1)}%
-        
-        [ MEMORY ]
-        Total Memory: {round(psutil.virtual_memory().total / (1024 ** 3), 2)} GB
-        Available Memory: {round(psutil.virtual_memory().available / (1024 ** 3), 2)} GB
-        Used Memory: {round(psutil.virtual_memory().used / (1024 ** 3), 2)} GB
-        
-        [ DISK ]
-        Disk Total: {round(psutil.disk_usage("C:\\").total / (1024 ** 3), 2)} GB
-        Disk Used: {round(psutil.disk_usage("C:\\").used / (1024 ** 3), 2)} GB
-        Disk Free: {round(psutil.disk_usage("C:\\").free / (1024 ** 3), 2)} GB
-""")
+def make_table():
+    table = Table(title="Sentinel")
 
-#В дальнейшем придумать что-то нормальное
+    table.add_column("Parameter")
+    table.add_column("Value")
+
+    cpu(table)
+    memory(table)
+    disk(table)
+
+    return table
+
+def cpu(table):
+    table.add_row("CPU Used",f"{psutil.cpu_percent(interval=1)}%")
+
+
+def memory(table):
+    table.add_row("Memory Used",f"{round(psutil.virtual_memory().used / (1024 ** 3), 2)} GB")
+
+
+
+def disk(table):
+    table.add_row("Disk Used",f"{round(psutil.disk_usage('C:\\').used / (1024 **  3), 2)} GB")
+
+
+with Live(make_table()) as live:
+    while True:
+        live.update(make_table())
+
+
+#Следовать задумкам-придумкам и мапе :)
